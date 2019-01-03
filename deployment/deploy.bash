@@ -16,7 +16,7 @@ sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again p
 echo -e "[client]\nuser=root\npassword=$ROOT_SQL_PASS" | sudo tee /root/.my.cnf
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y install git python-virtualenv python3-virtualenv curl ntp build-essential screen cmake pkg-config libboost-all-dev libevent-dev libunbound-dev libminiupnpc-dev libunwind8-dev liblzma-dev libldns-dev libexpat1-dev mysql-server lmdb-utils libzmq3-dev
 cd ~
-git clone https://github.com/bobbieltd/nodejs-pool.git  # Change this depending on how the deployment goes.
+git clone https://github.com/Cryolitecoin/nodejs-pool-1.git  # Change this depending on how the deployment goes.
 # cd /usr/src/gtest
 # sudo cmake .
 # sudo make
@@ -24,13 +24,13 @@ git clone https://github.com/bobbieltd/nodejs-pool.git  # Change this depending 
 cd ~
 sudo systemctl enable ntp
 cd /usr/local/src
-sudo git clone --recursive https://github.com/electronero/electronero.git
+sudo git clone --recursive https://github.com/electronero-pulse/electroneropulse.git
 cd electronero
 sudo git submodule init
 sudo git submodule update
 sudo make -j$(nproc)
-sudo cp ~/nodejs-pool/deployment/electronero.service /lib/systemd/system/
-sudo useradd -m electronerodaemon -d /home/electronerodaemon
+sudo cp ~/nodejs-pool/deployment/electroneropulse.service /lib/systemd/system/
+sudo useradd -m electroneropulsedaemon -d /home/electroneropulsedaemon
 sudo systemctl daemon-reload
 sudo systemctl enable monero
 sudo systemctl start monero
@@ -87,4 +87,4 @@ mysql -u root --password=$ROOT_SQL_PASS pool -e "INSERT INTO pool.config (module
 mysql -u root --password=$ROOT_SQL_PASS pool -e "INSERT INTO pool.config (module, item, item_value, item_type, Item_desc) VALUES ('api', 'secKey', '`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`', 'string', 'HMAC key for Passwords.  JWT Secret Key.  Changing this will invalidate all current logins.')"
 pm2 start init.js --name=api --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=api
 bash ~/nodejs-pool/deployment/install_lmdb_tools.sh
-echo "You're setup!  Please read the rest of the readme for the remainder of your setup and configuration.  These steps include: Setting your Fee Address, Pool Address, Global Domain, and the Mailgun setup!"
+echo "You're setup! Setting your Fee Address, Pool Address, Global Domain, and the Mailgun setup!"

@@ -1,0 +1,13 @@
+[Unit]
+Description=Electronero Pulse Daemon
+After=network.target
+
+[Service]
+Type=forking
+GuessMainPID=no
+ExecStart=/usr/local/src/electronero/build/release/bin/pulsed --rpc-bind-ip 127.0.0.1 --detach --restricted-rpc
+Restart=always
+User=electroneropulsedaemon
+
+[Install]
+WantedBy=multi-user.target
